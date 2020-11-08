@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticketing-tickets-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticketing-tickets
+  template:
+    metadata:
+      labels:
+        app: ticketing-tickets
+    spec:
+      containers:
+        - name: ticketing-tickets
+          image: xenjaya/ticketing-tickets
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://ticketing-tickets-mongo-srv:27017/ticketing-tickets'
+            - name: NATS_URL
+              value: 'http://nats-streaming-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: 'ticketing'
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: COOKIE_SIGNING_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cookie-secret
+                  key: COOKIE_SIGNING_KEY
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticketing-tickets-srv
+spec:
+  selector:
+    app: ticketing-tickets
+  ports:
+    - name: ticketing-tickets
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

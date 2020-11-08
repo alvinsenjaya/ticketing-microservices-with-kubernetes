@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticketing-orders-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticketing-orders-mongo
+  template:
+    metadata:
+      labels:
+        app: ticketing-orders-mongo
+    spec:
+      containers:
+        - name: ticketing-orders-mongo
+          image: mongo
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticketing-orders-mongo-srv
+spec:
+  selector:
+    app: ticketing-orders-mongo
+  ports:
+    - name: ticketing-orders-mongo
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

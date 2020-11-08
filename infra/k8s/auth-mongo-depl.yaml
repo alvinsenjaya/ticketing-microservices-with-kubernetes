@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticketing-auth-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticketing-auth-mongo
+  template:
+    metadata:
+      labels:
+        app: ticketing-auth-mongo
+    spec:
+      containers:
+        - name: ticketing-auth-mongo
+          image: mongo
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticketing-auth-mongo-srv
+spec:
+  selector:
+    app: ticketing-auth-mongo
+  ports:
+    - name: ticketing-auth-mongo
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

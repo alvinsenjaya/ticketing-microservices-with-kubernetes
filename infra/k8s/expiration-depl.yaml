@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticketing-expiration-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticketing-expiration
+  template:
+    metadata:
+      labels:
+        app: ticketing-expiration
+    spec:
+      containers:
+        - name: ticketing-expiration
+          image: xenjaya/ticketing-expiration
+          env:
+            - name: REDIS_HOST
+              value: ticketing-expiration-redis-srv
+            - name: NATS_URL
+              value: 'http://nats-streaming-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: 'ticketing'
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name

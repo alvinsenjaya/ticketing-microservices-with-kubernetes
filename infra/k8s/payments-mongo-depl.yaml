@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticketing-payments-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticketing-payments-mongo
+  template:
+    metadata:
+      labels:
+        app: ticketing-payments-mongo
+    spec:
+      containers:
+        - name: ticketing-payments-mongo
+          image: mongo
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticketing-payments-mongo-srv
+spec:
+  selector:
+    app: ticketing-payments-mongo
+  ports:
+    - name: ticketing-payments-mongo
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
