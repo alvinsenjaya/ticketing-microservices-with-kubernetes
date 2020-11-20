@@ -37,3 +37,7 @@ kubectl apply -f infra/k8s/
 kubectl get ingress
 ```
 7. Open your browser and type in the IP address. Enjoy :)
+
+
+### Snapshot of Application
+![Ticketing Application](https://i.imgur.com/lE2TzHt.png)
